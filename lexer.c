@@ -87,6 +87,7 @@ Token* ProximoToken() {
         // TODO: verificar se existe erro léxico no final do literal inteiro
         while (!eof() && isdigit(buffer->cont[pos]))
             pos++;
+
         char *texto = TextoToken(initPos, pos);
         tok->tipo = TOKEN_INT;
         tok->valor = atoi(texto);
