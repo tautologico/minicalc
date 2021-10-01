@@ -5,29 +5,40 @@
 #include "lexer.h"
 #include "parser.h"
 
-void AvaliaExpressao(Expressao* e) {
+int AvaliaExpressao(Expressao* e) {
+    int res = 0;
+    int v1, v2;
+
     switch (e->oper) {
         case OPER_CONST:
-            printf("%d\n", e->valor1);
+            res = e->valor;
             break;
         case OPER_SOMA:
-            printf("%d\n", e->valor1 + e->valor2);
+            v1 = AvaliaExpressao(e->op1);
+            v2 = AvaliaExpressao(e->op2);
+            res = v1 + v2;
             break;
         case OPER_MULT:
-            printf("%d\n", e->valor1 * e->valor2);
+            v1 = AvaliaExpressao(e->op1);
+            v2 = AvaliaExpressao(e->op2);
+            res = v1 * v2;
             break;
         default:
             printf("Operador nao reconhecido.\n");
     }
+
+    return res;
 }
 
 int main() {
-    InicializaLexer("../test/expsimples.mc");
+    InicializaLexer("../test/expcomplexa.mc");
 
     // arvore sintatica do programa
     Programa *p = AnalisePrograma();
 
-    AvaliaExpressao(p->e);
+    int resultado = AvaliaExpressao(p->e);
+
+    printf("%d\n", resultado);
 
     DestroiPrograma(p);
     FinalizaLexer();

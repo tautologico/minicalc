@@ -33,12 +33,12 @@ Programa* AnalisePrograma() {
     // analisa a expressao seguinte
     res->e = AnaliseExpressao();
 
-    t = ProximoToken();
-
-    if (t->tipo != TOKEN_EOF) {
-        fprintf(stderr, "Erro sintatico: entrada adicional apos fim do programa.");
-        exit(2);
-    }
+//    t = ProximoToken();
+//
+//    if (t->tipo != TOKEN_EOF) {
+//        fprintf(stderr, "Erro sintatico: entrada adicional apos fim do programa.");
+//        exit(2);
+//    }
 
     return res;
 }
@@ -53,7 +53,9 @@ Expressao* AnaliseExpressao() {
     // se proximo token for constante inteira, retorne expressao constante
     if (t->tipo == TOKEN_INT) {
         res->oper = OPER_CONST;
-        res->valor1 = t->valor;
+        res->valor = t->valor;
+        res->op1 = NULL;
+        res->op2 = NULL;
         return res;
     }
 
@@ -62,15 +64,8 @@ Expressao* AnaliseExpressao() {
         exit(2);
     }
 
-    // inteiro
-    t = ProximoToken();
-
-    if (t->tipo != TOKEN_INT) {
-        fprintf(stderr, "Erro sintatico: constante inteira esperada");
-        exit(2);
-    }
-
-    res->valor1 = t->valor;
+    // primeiro operando
+    res->op1 = AnaliseExpressao(); // Expressao*
 
     // operador
     t = ProximoToken();
@@ -82,15 +77,8 @@ Expressao* AnaliseExpressao() {
 
     res->oper = (t->tipo == TOKEN_SOMA ? OPER_SOMA : OPER_MULT);
 
-    // inteiro
-    t = ProximoToken();
-
-    if (t->tipo != TOKEN_INT) {
-        fprintf(stderr, "Erro sintatico: constante inteira esperada");
-        exit(2);
-    }
-
-    res->valor2 = t->valor;
+    // segundo operando
+    res->op2 = AnaliseExpressao();
 
     // parentese fechando
     t = ProximoToken();
@@ -103,8 +91,19 @@ Expressao* AnaliseExpressao() {
     return res;
 }
 
+void DestroiExpressao(Expressao *e) {
+    if (e->oper == OPER_SOMA || e->oper == OPER_MULT) {
+        DestroiExpressao(e->op1);
+        DestroiExpressao(e->op2);
+        e->op1 = NULL;
+        e->op2 = NULL;
+    }
+
+    free(e);
+}
+
 void DestroiPrograma(Programa *p) {
-    free(p->e);
+    DestroiExpressao(p->e);
     p->e = NULL;
     free(p);
 }

@@ -12,8 +12,9 @@ typedef enum tagTipoOper {
 } TipoOper;
 
 typedef struct tagExpressao {
-    int valor1;
-    int valor2;
+    struct tagExpressao *op1;
+    struct tagExpressao *op2;
+    int valor;
     TipoOper oper;
 } Expressao;
 
