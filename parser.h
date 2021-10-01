@@ -7,7 +7,8 @@
 
 typedef enum tagTipoOper {
     OPER_SOMA,
-    OPER_MULT
+    OPER_MULT,
+    OPER_CONST
 } TipoOper;
 
 typedef struct tagExpressao {

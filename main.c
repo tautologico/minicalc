@@ -7,6 +7,9 @@
 
 void AvaliaExpressao(Expressao* e) {
     switch (e->oper) {
+        case OPER_CONST:
+            printf("%d\n", e->valor1);
+            break;
         case OPER_SOMA:
             printf("%d\n", e->valor1 + e->valor2);
             break;
@@ -19,8 +22,9 @@ void AvaliaExpressao(Expressao* e) {
 }
 
 int main() {
-    InicializaLexer("../test/literal.mc");
+    InicializaLexer("../test/expsimples.mc");
 
+    // arvore sintatica do programa
     Programa *p = AnalisePrograma();
 
     AvaliaExpressao(p->e);

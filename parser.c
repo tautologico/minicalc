@@ -33,6 +33,13 @@ Programa* AnalisePrograma() {
     // analisa a expressao seguinte
     res->e = AnaliseExpressao();
 
+    t = ProximoToken();
+
+    if (t->tipo != TOKEN_EOF) {
+        fprintf(stderr, "Erro sintatico: entrada adicional apos fim do programa.");
+        exit(2);
+    }
+
     return res;
 }
 
@@ -42,6 +49,13 @@ Expressao* AnaliseExpressao() {
 
     // parentese abrindo
     t = ProximoToken();
+
+    // se proximo token for constante inteira, retorne expressao constante
+    if (t->tipo == TOKEN_INT) {
+        res->oper = OPER_CONST;
+        res->valor1 = t->valor;
+        return res;
+    }
 
     if (t->tipo != TOKEN_ABREPAR) {
         fprintf(stderr, "Erro sintatico: '(' esperado");
