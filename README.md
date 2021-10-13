@@ -45,13 +45,41 @@ Mais operações.
 
 ## Estágio 3
 
-Variáveis.
+Inlcui a possibilidade de declarar e utilizar variáveis nas expressões.
+
+Programas são da forma
+
+```
+var <ident> = E;
+var <ident> = E;
+...
+print E
+```
+
+`<ident>` é um identificador. Um identificador é uma sequência de caracteres,
+começando por uma letra, que pode incluir letras, dígitos e o caractere 
+sublinhado (underline).
+
+As expressões podem ser:
+
+```
+E ::= (E + E) | (E * E)
+E ::= <numero> | <ident>
+```
 
 Exemplo 1:
 
 ```
-var x = 42
-var y = 11
+var x = 42;
+var y = 11;
+print (x + (y * 31))
+```
+
+Exemplo 2:
+
+```
+var x = (42 + 78);
+var y = (x * 278);
 print (x + (y * 31))
 ```
 
