@@ -1,2 +1,2 @@
-var xyz=3;
-print (x+xyz)
+var x = 3;
+print (x * 42)
