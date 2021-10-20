@@ -10,6 +10,11 @@ int AvaliaExpressao(Expressao* e) {
     int v1, v2;
 
     switch (e->oper) {
+        case OPER_VAR:
+            // TODO: consulta a tabela de variaveis para obter o valor
+            // res = ConsultaTabela(e->nomeIdent);
+            printf("Variaveis nao estao implementadas\n");
+            break;
         case OPER_CONST:
             res = e->valor;
             break;
@@ -30,11 +35,23 @@ int AvaliaExpressao(Expressao* e) {
     return res;
 }
 
+void ImprimeDeclaracoes(Declaracao *d) {
+    while (d != NULL) {
+        printf("Declaracao - ident: %s\n", d->nomeIdent);
+        d = d->next;
+    }
+}
+
 int main() {
-    InicializaLexer("../test/expcomplexa.mc");
+    InicializaLexer("../test/var1.mc");
 
     // arvore sintatica do programa
     Programa *p = AnalisePrograma();
+
+    ImprimeDeclaracoes(p->decls);
+
+    // TODO: Processa declaracoes de variaveis e cria tabela de variaveis
+    // ProcessaDeclaracoes(p->decls);
 
     int resultado = AvaliaExpressao(p->e);
 
