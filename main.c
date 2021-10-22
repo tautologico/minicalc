@@ -4,6 +4,7 @@
 #include "arq.h"
 #include "lexer.h"
 #include "parser.h"
+#include "var.h"
 
 int AvaliaExpressao(Expressao* e) {
     int res = 0;
@@ -11,9 +12,13 @@ int AvaliaExpressao(Expressao* e) {
 
     switch (e->oper) {
         case OPER_VAR:
-            // TODO: consulta a tabela de variaveis para obter o valor
-            // res = ConsultaTabela(e->nomeIdent);
-            printf("Variaveis nao estao implementadas\n");
+            // consulta a tabela de variaveis para obter o valor
+            if (ConsultaVar(e->nomeIdent, &v1)) {
+                res = v1;
+            } else {
+                fprintf(stderr, "Variavel nao declarada: %s\n", e->nomeIdent);
+                exit(3);
+            }
             break;
         case OPER_CONST:
             res = e->valor;
@@ -42,16 +47,24 @@ void ImprimeDeclaracoes(Declaracao *d) {
     }
 }
 
+void ProcessaDeclaracoes(Declaracao *d) {
+    while (d != NULL) {
+        int val = AvaliaExpressao(d->e);
+        AdicionaVar(d->nomeIdent, val);
+        d = d->next;
+    }
+}
+
 int main() {
-    InicializaLexer("../test/var1.mc");
+    InicializaLexer("../test/var2.mc");
 
     // arvore sintatica do programa
     Programa *p = AnalisePrograma();
 
-    ImprimeDeclaracoes(p->decls);
+    // ImprimeDeclaracoes(p->decls);
 
-    // TODO: Processa declaracoes de variaveis e cria tabela de variaveis
-    // ProcessaDeclaracoes(p->decls);
+    // Processa declaracoes de variaveis e cria tabela de variaveis
+    ProcessaDeclaracoes(p->decls);
 
     int resultado = AvaliaExpressao(p->e);
 

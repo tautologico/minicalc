@@ -63,7 +63,8 @@ Programa* AnalisePrograma() {
         exit(1);
     }
 
-    Declaracao *d = AnaliseDeclaracao();
+    Declaracao *orig = AnaliseDeclaracao();   // origem da lista encadeada
+    Declaracao *d = orig;
     if (d != NULL) {
         Declaracao *d2 = AnaliseDeclaracao();
         while (d2 != NULL) {
@@ -74,7 +75,7 @@ Programa* AnalisePrograma() {
         d->next = NULL;
     }
 
-    res->decls = d;
+    res->decls = orig;
 
     // verifica se o programa começa com palavra-chave 'print'
     // t = ProximoToken();
